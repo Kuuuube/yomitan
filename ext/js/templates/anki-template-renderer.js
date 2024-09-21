@@ -91,6 +91,7 @@ export class AnkiTemplateRenderer {
             ['join',             this._join.bind(this)],
             ['concat',           this._concat.bind(this)],
             ['pitchCategories',  this._pitchCategories.bind(this)],
+            ['pitchAccentList',  this._pitchAccentList.bind(this)],
             ['formatGlossary',   this._formatGlossary.bind(this)],
             ['hasMedia',         this._hasMedia.bind(this)],
             ['getMedia',         this._getMedia.bind(this)],
@@ -753,6 +754,44 @@ export class AnkiTemplateRenderer {
             default:
                 return '';
         }
+    }
+
+    /**
+     * @type {import('template-renderer').HelperFunction<string>}
+     */
+    _pitchAccentList(_args, _context, options) {
+        const {format, pitches} = options.hash;
+        const pronunciationHtmlArray = [];
+        for (let i = 0; i < pitches.length; i++) {
+            console.log(pitches[i]);
+            const dictPitch = pitches[i].pitches;
+            for (let j = 0; j < dictPitch.length; j++) {
+                const {reading, position} = dictPitch[j];
+                const morae = getKanaMorae(reading);
+                switch (format) {
+                    case 'text':
+                    {
+                        const nasalPositions = this._getValidNumberArray(options.hash.nasalPositions);
+                        const devoicePositions = this._getValidNumberArray(options.hash.devoicePositions);
+                        pronunciationHtmlArray.push(this._getPronunciationHtml(createPronunciationText(morae, position, nasalPositions, devoicePositions)).string);
+                        break;
+                    }
+                    case 'graph':
+                        pronunciationHtmlArray.push(this._getPronunciationHtml(createPronunciationGraph(morae, position)).string);
+                        break;
+                    case 'graph-jj':
+                        pronunciationHtmlArray.push(this._getPronunciationHtml(createPronunciationGraphJJ(morae, position)).string);
+                        break;
+                    case 'position':
+                        pronunciationHtmlArray.push(this._getPronunciationHtml(createPronunciationDownstepPosition(position)).string);
+                        break;
+                    default:
+                        continue;
+                }
+            }
+        }
+        console.log(pronunciationHtmlArray);
+        return '0';
     }
 
     /**
