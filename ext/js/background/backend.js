@@ -20,6 +20,7 @@ import {AnkiConnect} from '../comm/anki-connect.js';
 import {ClipboardMonitor} from '../comm/clipboard-monitor.js';
 import {ClipboardReader} from '../comm/clipboard-reader.js';
 import {Mecab} from '../comm/mecab.js';
+import {WebSocketApi} from '../comm/websocket-api.js';
 import {createApiMap, invokeApiMapHandler} from '../core/api-map.js';
 import {ExtensionError} from '../core/extension-error.js';
 import {fetchText} from '../core/fetch-utilities.js';
@@ -61,6 +62,8 @@ export class Backend {
         this._anki = new AnkiConnect();
         /** @type {Mecab} */
         this._mecab = new Mecab();
+        /** @type {WebSocketApi} */
+        this._websocketApi = new WebSocketApi();
 
         if (!chrome.offscreen) {
             /** @type {?OffscreenProxy} */
