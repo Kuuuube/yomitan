@@ -1366,6 +1366,9 @@ export class Backend {
         this._anki.enabled = options.anki.enable;
         this._anki.apiKey = apiKey;
 
+        this._websocketApi.serverUrl = 'ws://127.0.0.1:8080';
+        void this._websocketApi.connectWebsocket();
+
         this._mecab.setEnabled(options.parsing.enableMecabParser && enabled);
 
         if (options.clipboard.enableBackgroundMonitor && enabled) {
