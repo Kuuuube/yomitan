@@ -632,6 +632,10 @@ class ProfileConditionUI {
         this._operatorOptionContainer = querySelectorNotNull(this._operatorInput, 'optgroup');
         /** @type {HTMLInputElement} */
         this._valueInput = querySelectorNotNull(this._node, '.profile-condition-input');
+        /** @type {HTMLSelectElement} */
+        this._valueSelect = querySelectorNotNull(this._node, '.profile-condition-select');
+        /** @type {HTMLInputElement | HTMLSelectElement} */
+        this._valueElement = this._valueInput;
         /** @type {string} */
         this._value = '';
         /** @type {?KeyboardMouseInputField} */
@@ -672,10 +676,12 @@ class ProfileConditionUI {
     prepare(condition) {
         const {type, operator, value} = condition;
 
+        this._setValueElementType(type);
+
         const operatorDetails = this._getOperatorDetails(type, operator);
         this._updateTypes(type);
         this._updateOperators(type, operator);
-        this._updateValueInput(value, operatorDetails);
+        this._updateValueElement(value, operatorDetails);
 
         this._eventListeners.addEventListener(this._typeInput, 'change', this._onTypeChange.bind(this), false);
         this._eventListeners.addEventListener(this._operatorInput, 'change', this._onOperatorChange.bind(this), false);
@@ -715,6 +721,7 @@ class ProfileConditionUI {
         const type = ProfileConditionsUI.normalizeProfileConditionType(element.value);
         if (type === null) { return; }
         void this._setType(type);
+        this._setValueElementType(type);
     }
 
     /**
@@ -755,6 +762,26 @@ class ProfileConditionUI {
         if (okay) {
             const normalizedValue = this._normalizeValue(modifiers, normalize);
             void this.settingsController.setGlobalSetting(this.getPath('value'), normalizedValue);
+        }
+    }
+
+    /**
+     * @param {import('settings').ProfileConditionType} type
+     */
+    _setValueElementType(type) {
+        this._valueInput.hidden = true;
+        this._valueSelect.hidden = true;
+        switch (type) {
+            case 'modifierKeys':
+            case 'popupLevel':
+            case 'url':
+                this._valueInput.hidden = false;
+                this._valueElement = this._valueInput;
+                break;
+            case 'flags':
+                this._valueSelect.hidden = false;
+                this._valueElement = this._valueSelect;
+                break;
         }
     }
 
@@ -850,7 +877,23 @@ class ProfileConditionUI {
      * @param {import('profile-conditions-ui').Operator} operator
      * @returns {boolean}
      */
-    _updateValueInput(value, {type, validate, normalize}) {
+    _updateValueElement(value, operator) {
+        if (this._valueElement instanceof HTMLInputElement) {
+            return this._updateValueInput(this._valueElement, value, operator);
+        }
+        if (this._valueElement instanceof HTMLSelectElement) {
+            return this._updateValueSelect(this._valueElement, value, operator);
+        }
+        return false;
+    }
+
+    /**
+     * @param {HTMLInputElement} valueElement
+     * @param {string} value
+     * @param {import('profile-conditions-ui').Operator} operator
+     * @returns {boolean}
+     */
+    _updateValueInput(valueElement, value, {type, validate, normalize}) {
         this._inputEventListeners.removeAllEventListeners();
         if (this._kbmInputField !== null) {
             this._kbmInputField.cleanup();
@@ -864,7 +907,7 @@ class ProfileConditionUI {
         let showMouseButton = false;
         /** @type {import('profile-conditions-ui').InputData} */
         const inputData = {validate, normalize};
-        const node = this._valueInput;
+        const node = valueElement;
 
         switch (type) {
             case 'integer':
@@ -909,13 +952,33 @@ class ProfileConditionUI {
     }
 
     /**
+     * @param {HTMLSelectElement} valueElement
+     * @param {string} value
+     * @param {import('profile-conditions-ui').Operator} operator
+     * @returns {boolean}
+     */
+    _updateValueSelect(valueElement, value, {validate, normalize}) {
+        this._inputEventListeners.removeAllEventListeners();
+
+        /** @type {import('profile-conditions-ui').InputData} */
+        const inputData = {validate, normalize};
+        const node = valueElement;
+
+        this._value = value;
+        delete node.dataset.invalid;
+
+        this._inputEventListeners.addEventListener(node, 'change', this._onValueInputChange.bind(this, inputData), false);
+        return this._validateValue(value, validate);
+    }
+
+    /**
      * @param {string} value
      * @param {?import('profile-conditions-ui').ValidateFunction} validate
      * @returns {boolean}
      */
     _validateValue(value, validate) {
         const okay = (validate === null || validate(value));
-        this._valueInput.dataset.invalid = `${!okay}`;
+        this._valueElement.dataset.invalid = `${!okay}`;
         return okay;
     }
 
@@ -967,7 +1030,7 @@ class ProfileConditionUI {
         const operatorDetails = this._getOperatorDetails(type, operator);
         const {defaultValue} = operatorDetails;
         this._updateSelect(this._operatorInput, this._operatorOptionContainer, operators, operator);
-        this._updateValueInput(defaultValue, operatorDetails);
+        this._updateValueElement(defaultValue, operatorDetails);
         await this.settingsController.modifyGlobalSettings([
             {action: 'set', path: this.getPath('type'), value: type},
             {action: 'set', path: this.getPath('operator'), value: operator},
@@ -985,7 +1048,7 @@ class ProfileConditionUI {
         const settingsModifications = [{action: 'set', path: this.getPath('operator'), value: operator}];
         if (operatorDetails.resetDefaultOnChange) {
             const {defaultValue} = operatorDetails;
-            const okay = this._updateValueInput(defaultValue, operatorDetails);
+            const okay = this._updateValueElement(defaultValue, operatorDetails);
             if (okay) {
                 settingsModifications.push({action: 'set', path: this.getPath('value'), value: defaultValue});
             }
