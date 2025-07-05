@@ -151,6 +151,7 @@ export type GeneralOptions = {
     sortFrequencyDictionary: string | null;
     sortFrequencyDictionaryOrder: SortFrequencyDictionaryOrder;
     stickySearchHeader: boolean;
+    enableYomitanApi: boolean;
 };
 
 export type PopupWindowOptions = {
@@ -311,13 +312,15 @@ export type AnkiScreenshotOptions = {
 };
 
 export type AnkiCardFormat = {
-    type: 'kanji' | 'term';
+    type: AnkiCardFormatType;
     name: string;
     deck: string;
     model: string;
     fields: AnkiFields;
     icon: AddNoteIcon;
 };
+
+export type AnkiCardFormatType = 'kanji' | 'term';
 
 export type AddNoteIcon = 'big-circle' | 'small-circle' | 'big-square' | 'big-diamond';
 

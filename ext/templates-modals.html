@@ -987,6 +987,14 @@
                         <td>First definition for the term.</td>
                     </tr>
                     <tr>
+                        <td><code class="anki-field-marker">{glossary-plain}</code></td>
+                        <td>List of definitions for the term with html only used for line breaks. This may break the formatting of some dictionaries.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="anki-field-marker">{glossary-plain-no-dictionary}</code></td>
+                        <td><code class="anki-field-marker">{glossary-plain}</code> except the dictionary tag is omitted.</td>
+                    </tr>
+                    <tr>
                         <td><code class="anki-field-marker">{glossary-first-brief}</code></td>
                         <td>First definition for the term in a more compact format.</td>
                     </tr>
@@ -1043,6 +1051,18 @@
                         <td><code class="anki-field-marker">{single-glossary-DICT-NAME-no-dictionary}</code></td>
                         <td>
                             See <code class="anki-field-marker">{single-glossary-DICT-NAME}</code> and <code class="anki-field-marker">{glossary-no-dictionary}</code>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code class="anki-field-marker">{single-glossary-DICT-NAME-plain}</code></td>
+                        <td>
+                            See <code class="anki-field-marker">{single-glossary-DICT-NAME}</code> and <code class="anki-field-marker">{glossary-plain}</code>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><code class="anki-field-marker">{single-glossary-DICT-NAME-plain-no-dictionary}</code></td>
+                        <td>
+                            See <code class="anki-field-marker">{single-glossary-DICT-NAME}</code> and <code class="anki-field-marker">{glossary-plain-no-dictionary}</code>.
                         </td>
                     </tr>
                     <tr>
@@ -1150,6 +1170,14 @@
                             The average of frequency data for the current term or kanji.<br>
                             Defaults to 0 occurrences when frequency data is not found, the lowest possible occurrence-based term or kanji usage.
                         </td>
+                    </tr>
+                    <tr>
+                        <td><code class="anki-field-marker">{single-frequency-DICT-NAME}</code></td>
+                        <td>All frequencies from the selected dictionary put in a list.</td>
+                    </tr>
+                    <tr>
+                        <td><code class="anki-field-marker">{single-frequency-number-DICT-NAME}</code></td>
+                        <td>A single frequency number from the selected dictionary with no formatting data.</td>
                     </tr>
                     <tr>
                         <td><code class="anki-field-marker">{screenshot}</code></td>
@@ -1282,10 +1310,9 @@
             </div>
             <textarea autocomplete="off" spellcheck="false" id="generate-anki-notes-textarea" class="no-wrap margin-above" data-tab-action="indent,4"></textarea>
             <div class="generate-anki-notes-test-container margin-above">
-                <p>
-                    Active Anki deck: <code id="generate-anki-notes-active-deck"></code><br>
-                    Active Anki model: <code id="generate-anki-notes-active-model"></code>
-                </p>
+                <div>Active Anki Flashcard Format: <select id="generate-anki-flashcard-format"></select></div>
+                <div>Active Anki deck: <code id="generate-anki-notes-active-deck"></code></div>
+                <div>Active Anki model: <code id="generate-anki-notes-active-model"></code></div>
                 <div class="generate-anki-notes-test-table margin-above">
                     <div class="generate-anki-notes-test-table-header">Test word</div>
                     <div></div>

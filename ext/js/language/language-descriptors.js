@@ -45,6 +45,7 @@ import {
     convertHiraganaToKatakana,
     normalizeCJKCompatibilityCharacters,
     normalizeCombiningCharacters,
+    standardizeKanji,
 } from './ja/japanese-text-preprocessors.js';
 import {japaneseTransforms} from './ja/japanese-transforms.js';
 import {isStringPartiallyJapanese} from './ja/japanese.js';
@@ -110,6 +111,13 @@ const languageDescriptors = [
             convertHaToTaMarbuta,
         },
         languageTransforms: arabicTransforms,
+    },
+    {
+        iso: 'bg',
+        iso639_3: 'bul',
+        name: 'Bulgarian',
+        exampleText: 'чета',
+        textPreprocessors: capitalizationPreprocessors,
     },
     {
         iso: 'cs',
@@ -224,6 +232,14 @@ const languageDescriptors = [
         languageTransforms: ancientGreekTransforms,
     },
     {
+        // no 2 letter iso for hawaiian
+        iso: 'haw',
+        iso639_3: 'haw',
+        name: 'Hawaiian',
+        exampleText: 'heluhelu',
+        textPreprocessors: capitalizationPreprocessors,
+    },
+    {
         iso: 'he',
         iso639_3: 'heb',
         name: 'Hebrew',
@@ -302,6 +318,7 @@ const languageDescriptors = [
             alphanumericWidthVariants,
             convertHiraganaToKatakana,
             collapseEmphaticSequences,
+            standardizeKanji,
         },
         languageTransforms: japaneseTransforms,
     },
@@ -453,6 +470,13 @@ const languageDescriptors = [
         iso639_3: 'tur',
         name: 'Turkish',
         exampleText: 'okumak',
+        textPreprocessors: capitalizationPreprocessors,
+    },
+    {
+        iso: 'tok',
+        iso639_3: 'tok',
+        name: 'Toki Pona',
+        exampleText: 'wile',
         textPreprocessors: capitalizationPreprocessors,
     },
     {
