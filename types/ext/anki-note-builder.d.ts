@@ -70,7 +70,7 @@ export type GetRenderingDataDetails = {
 export type CommonData = AnkiTemplatesInternal.CreateDetails;
 
 export type RequirementGeneric = {
-    type: 'audio' | 'screenshot' | 'clipboardImage' | 'clipboardText' | 'popupSelectionText';
+    type: 'audio' | 'screenshot' | 'clipboardImage' | 'clipboardText' | 'popupSelectionText' | 'popupSelectionTextHtml';
 };
 
 export type RequirementTextFurigana = {

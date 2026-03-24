@@ -51,6 +51,7 @@ export function createAnkiNoteData(marker, {
             clipboardImage: void 0,
             clipboardText: void 0,
             popupSelectionText: void 0,
+            popupSelectionTextHtml: void 0,
             textFurigana: [],
             dictionaryMedia: {},
         };

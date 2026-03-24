@@ -102,6 +102,7 @@ export class TemplateRendererMediaProvider {
             case 'clipboardImage': return this._getSimpleMediaData(media, 'clipboardImage');
             case 'clipboardText': return this._getSimpleMediaData(media, 'clipboardText');
             case 'popupSelectionText': return this._getSimpleMediaData(media, 'popupSelectionText');
+            case 'popupSelectionTextHtml': return this._getSimpleMediaData(media, 'popupSelectionTextHtml');
             case 'textFurigana': return this._getTextFurigana(media, args[1], namedArgs, 'furiganaHtml');
             case 'textFuriganaPlain': return this._getTextFurigana(media, args[1], namedArgs, 'furiganaPlain');
             case 'dictionaryMedia': return this._getDictionaryMedia(media, args[1], namedArgs);

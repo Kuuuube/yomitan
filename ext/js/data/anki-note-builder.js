@@ -399,6 +399,7 @@ export class AnkiNoteBuilder {
         let injectClipboardImage = false;
         let injectClipboardText = false;
         let injectPopupSelectionText = false;
+        let injectPopupSelectionTextHtml = false;
         /** @type {import('anki-note-builder').TextFuriganaDetails[]} */
         const textFuriganaDetails = [];
         /** @type {import('api').InjectAnkiNoteMediaDictionaryMediaDetails[]} */
@@ -411,6 +412,7 @@ export class AnkiNoteBuilder {
                 case 'clipboardImage': injectClipboardImage = true; break;
                 case 'clipboardText': injectClipboardText = true; break;
                 case 'popupSelectionText': injectPopupSelectionText = true; break;
+                case 'popupSelectionTextHtml': injectPopupSelectionTextHtml = true; break;
                 case 'textFurigana':
                     {
                         const {text, readingMode} = requirement;
@@ -461,6 +463,7 @@ export class AnkiNoteBuilder {
 
         // Inject media
         const popupSelectionText = injectPopupSelectionText ? this._getPopupSelectionText() : null;
+        const popupSelectionTextHtml = injectPopupSelectionTextHtml ? this._getPopupSelectionTextHtml() : null;
         const injectedMedia = await this._api.injectAnkiNoteMedia(
             timestamp,
             dictionaryEntryDetails,
@@ -490,6 +493,7 @@ export class AnkiNoteBuilder {
             clipboardImage: (typeof clipboardImageFileName === 'string' ? {value: clipboardImageFileName} : void 0),
             clipboardText: (typeof clipboardText === 'string' ? {value: clipboardText} : void 0),
             popupSelectionText: (typeof popupSelectionText === 'string' ? {value: popupSelectionText} : void 0),
+            popupSelectionTextHtml: (typeof popupSelectionTextHtml === 'string' ? {value: popupSelectionTextHtml} : void 0),
             textFurigana,
             dictionaryMedia,
         };
@@ -502,6 +506,15 @@ export class AnkiNoteBuilder {
     _getPopupSelectionText() {
         const selection = document.getSelection();
         return selection !== null ? selection.toString() : '';
+    }
+
+    /**
+     * @returns {string}
+     */
+    _getPopupSelectionTextHtml() {
+        const selection = document.getSelection()?.getRangeAt(0)?.cloneContents().children;
+        if (!selection) { return ''; }
+        return [...selection].map((x) => x.outerHTML).join('');
     }
 
     /**

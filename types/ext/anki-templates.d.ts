@@ -33,6 +33,7 @@ export type Media = {
     clipboardImage?: MediaObject;
     clipboardText?: MediaObject;
     popupSelectionText?: MediaObject;
+    popupSelectionTextHtml?: MediaObject;
     textFurigana?: TextFuriganaSegment[];
     dictionaryMedia?: DictionaryMedia;
 };
@@ -44,7 +45,8 @@ export type MediaSimpleType = (
     'screenshot' |
     'clipboardImage' |
     'clipboardText' |
-    'popupSelectionText'
+    'popupSelectionText' |
+    'popupSelectionTextHtml'
 );
 
 export type TextFuriganaSegment = {
